@@ -21,26 +21,10 @@ namespace MyToDo
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
-            containerRegistry.RegisterDialog<LoginUC, LoginUCViewModel>();
+            containerRegistry.RegisterDialog<LoginWindow, LoginWindowViewModel>("Login");
         }
 
-        protected override void OnInitialized()
-        {
-            var loginDialog = Container.Resolve<IDialogService>();
-            loginDialog.ShowDialog("LoginUC", null, r =>
-            {
-                if (r.Result == ButtonResult.OK)
-                {
-                    base.OnInitialized();
-                }
-                else
-                {
-                    Environment.Exit(0);
-                    
-                }
-            });
-            
-        }
+        
     }
 
 }

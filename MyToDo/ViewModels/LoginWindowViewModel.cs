@@ -1,4 +1,5 @@
 ﻿using Prism.Commands;
+using Prism.Mvvm;
 using Prism.Services.Dialogs;
 using System;
 using System.Collections.Generic;
@@ -8,18 +9,14 @@ using System.Threading.Tasks;
 
 namespace MyToDo.ViewModels
 {
-    internal class LoginUCViewModel : IDialogAware
+    internal class LoginWindowViewModel : BindableBase, IDialogAware
     {
-        public string Title { get; set; }= "To Do Login";
+        public string Title { get; set; }="ToDo";
 
         public event Action<IDialogResult> RequestClose;
 
-        public DelegateCommand LoginCommand { get; set; }
-        LoginUCViewModel()
-        {
-            LoginCommand = new DelegateCommand(OnLogin);
-        }
-        
+        public DelegateCommand LoginCommand { get; }
+
         public bool CanCloseDialog()
         {
             return true;
@@ -32,13 +29,16 @@ namespace MyToDo.ViewModels
 
         public void OnDialogOpened(IDialogParameters parameters)
         {
-            //throw new NotImplementedException();
+           // throw new NotImplementedException();
         }
 
-        private void OnLogin()
+        public LoginWindowViewModel()
         {
-            var result = new DialogResult(ButtonResult.OK);
-            RequestClose?.Invoke(result);
+            LoginCommand = new DelegateCommand(() =>
+            {
+                // 验证逻辑...
+                RequestClose?.Invoke(new DialogResult(ButtonResult.OK));
+            });
         }
     }
 }
