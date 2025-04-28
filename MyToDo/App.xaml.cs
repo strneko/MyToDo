@@ -1,5 +1,7 @@
-﻿using MyToDo.ViewModels;
+﻿using DryIoc;
+using MyToDo.ViewModels;
 using MyToDo.Views;
+using MyToDo.WPF.HttpClient;
 using Prism.DryIoc;
 using Prism.Ioc;
 using Prism.Services.Dialogs;
@@ -22,6 +24,7 @@ namespace MyToDo
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
             containerRegistry.RegisterDialog<LoginWindow, LoginWindowViewModel>("Login");
+            containerRegistry.GetContainer().Register<HttpRestClient>(made:Parameters.Of.Type<string>(serviceKey:"webUrl"));
         }
 
         

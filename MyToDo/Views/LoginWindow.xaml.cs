@@ -42,12 +42,13 @@ namespace MyToDo.Views
             }
         }
 
+
         private void textPassword_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            textPassword.Focus();
+            txtPassword.Focus();
         }
 
-        private void txtPassword_TextChanged(object sender, TextChangedEventArgs e)
+        private void txtPassword_PasswordChanged(object sender, RoutedEventArgs e)
         {
             if (!string.IsNullOrEmpty(txtPassword.Password) && txtPassword.Password.Length > 0)
             {
@@ -58,11 +59,32 @@ namespace MyToDo.Views
             {
                 textPassword.Visibility = Visibility.Visible;
             }
+        
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-
+            if(string.IsNullOrEmpty(txtEmail.Text) || string.IsNullOrEmpty(txtPassword.Password))
+            {
+                MessageBox.Show("请输入用户名和密码");
+                return;
+            }
+            MessageBox.Show("登录成功");
         }
+
+        private void Border_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if(e.ChangedButton == MouseButton.Left)
+            {
+                var window = Window.GetWindow((DependencyObject)sender); 
+                window?.DragMove(); 
+            }
+        }
+
+        private void Image_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            Application.Current.Shutdown();
+        }
+
     }
 }

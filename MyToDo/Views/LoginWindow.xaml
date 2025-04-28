@@ -5,7 +5,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:local="clr-namespace:MyToDo.Views"
              mc:Ignorable="d"
-             d:DesignHeight="500" d:DesignWidth="800"
+             MinHeight="500" MinWidth="800"
              
              >
     
@@ -23,7 +23,8 @@
             <ColumnDefinition Width="1.5*" />
         </Grid.ColumnDefinitions>
 
-        <Border>
+        <!--<Image Source="/Resources/Images/close.png" Grid.Column="1" Panel.ZIndex="1" MouseUp="Image_MouseUp" Style="{StaticResource imgClose}"/>-->
+        <Border MouseDown="Border_MouseDown">
             <Border.Background>
                 <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
                     <GradientStop Color="#c9e4e4" Offset="0"/>
@@ -32,6 +33,7 @@
             </Border.Background>
 
             <Grid>
+
                 <Canvas>
                     <Polygon Points="0,20 230,140 0,270" Fill="#a0d4e4"/>
                     <Polygon Points="100,400 200,370 180,470" Fill="#a0d4e4"/>
@@ -39,16 +41,16 @@
                     <Ellipse Margin="50 400 0 0" Width="20" Height="20" Fill="#a0d4e4"/>
                 </Canvas>
 
-                <StackPanel VerticalAlignment="Center">
-                    <TextBlock Text="注册" Style="{StaticResource titleText}"/>
-                    <TextBlock Text="使用邮箱注册账户,开始规划每一天" Style="{StaticResource nomalText}" Opacity="0.8"/>
-                    <Button Content="注册" Style="{StaticResource button}"/>
+                <StackPanel VerticalAlignment="Center"   >
+                    <TextBlock Text="注册" Style="{StaticResource titleText}" Margin="0,10,0,30"/>
+                    <TextBlock Text="使用邮箱注册账户,开始规划每一天" Style="{StaticResource nomalText}"  Margin="0,10,0,10" Opacity="0.8"/>
+                    <Button Content="注册" Style="{StaticResource button}" Margin="0,20,0,10"/>
                 </StackPanel>
                 
             </Grid>
         </Border>
 
-        <Border Background="#dbeef0" Grid.Column="1" CornerRadius="0 10 10 0" >
+        <Border Background="#dbeef0" Grid.Column="1" CornerRadius="0 10 10 0" MouseDown="Border_MouseDown">
             <StackPanel VerticalAlignment="Center">
                 <TextBlock Text="登录" Style="{StaticResource titleText}" Foreground="#8cb4b4"/>
                 <StackPanel Orientation="Horizontal" Margin="0 20" HorizontalAlignment="Center">
@@ -65,29 +67,29 @@
 
                 <TextBlock Text="使用邮箱登录" Style="{StaticResource nomalText}" Foreground="#8cb4d4" Margin="0 10 0 15" />
 
-                <Border BorderThickness="1" BorderBrush="#8cb4d4" Margin="70 7" CornerRadius="5">
-                    <Grid Margin="7 9">
+                <Border BorderThickness="1" BorderBrush="#8cb4d4" Margin="70 7" CornerRadius="5"  MouseDown="textEmail_MouseDown" >
+                    <Grid Margin="7 9" >
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="auto" />
-                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
 
                         <Image Source="/Resources/Images/email.png" Height="20"/>
-                        <TextBlock x:Name="textEmail" MouseDown="textEmail_MouseDown" Text="邮箱" Style="{StaticResource textHint}"/>
+                        <TextBlock x:Name="textEmail"  Text="邮箱" Style="{StaticResource textHint}"/>
                         <TextBox x:Name="txtEmail" TextChanged="txtEmail_TextChanged" Background="Transparent" Style="{StaticResource textBox}"/>
                     </Grid>
                 </Border>
-                
-                <Border BorderThickness="1" BorderBrush="#8cb4d4" Margin="70 7" CornerRadius="5">
-                    <Grid Margin="7 9">
+
+                <Border BorderThickness="1" BorderBrush="#8cb4d4" Margin="70 7" CornerRadius="5"  MouseDown="textPassword_MouseDown"  >
+                    <Grid Margin="7 9"  >
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="auto" />
-                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
 
                         <Image Source="/Resources/Images/password.png" Height="20"/>
-                        <TextBlock x:Name="textPassword" MouseDown="textPassword_MouseDown" Text="密码" Style="{StaticResource textHint}"/>
-                        <PasswordBox x:Name="txtPassword" PasswordChanged="txtPassword_TextChanged" Background="Transparent" Style="{StaticResource textBox}"/>
+                        <TextBlock x:Name="textPassword"  Text="密码" Style="{StaticResource textHint}"/>
+                        <PasswordBox x:Name="txtPassword" PasswordChanged="txtPassword_PasswordChanged" Background="Transparent" Style="{StaticResource textBox}"/>
                     </Grid>
                 </Border>
                 <Button Content="登录" Click="Button_Click" Style="{StaticResource mainbutton}"/>
