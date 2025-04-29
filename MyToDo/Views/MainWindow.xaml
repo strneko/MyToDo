@@ -5,10 +5,66 @@
    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
    xmlns:local="clr-namespace:MyToDo"
    mc:Ignorable="d"
-   xmlns:prism="http://prismlibrary.com/" 
-   prism:ViewModelLocator.AutoWireViewModel="True"
-   Title="MainWindow" Height="1280" Width="1024">
-   <Grid>
-        <TextBlock Text="登录成功后的主界面" FontSize="50"></TextBlock>
-   </Grid>
+   xmlns:prism="http://prismlibrary.com/" xmlns:viewmodels="clr-namespace:MyToDo.ViewModels" d:DataContext="{d:DesignInstance Type=viewmodels:MainWindowViewModel}"
+        prism:ViewModelLocator.AutoWireViewModel="True"
+   Title="ToDo" Height="700" Width="1100">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Resources/MainStyles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+    
+    <DockPanel>
+        <!-- 左侧导航 -->
+        <DockPanel  Width="250" DockPanel.Dock="Left">
+            
+            <Grid Height="80" DockPanel.Dock="Top">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="auto"/>
+                </Grid.ColumnDefinitions>
+            </Grid>
+            <TextBox x:Name="SearchBox" Height="40" Text="搜索" DockPanel.Dock="Top">
+                <TextBox.InputBindings>
+                    <KeyBinding Key="Enter"/>
+                </TextBox.InputBindings>
+            </TextBox>
+            <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom" >
+                <Button Background="Transparent" BorderThickness="0" Command="{Binding AddTaskCommand}">
+                    <StackPanel Orientation="Horizontal" Margin="5">
+                        <Image Source="/Resources/Images/add.png" Width="20" Height="20" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                        <TextBlock Text="添加任务" Width="160" VerticalAlignment="Center" />
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+
+
+            <ListBox ItemsSource="{Binding GroupedItems}" ItemContainerStyle="{StaticResource NavListBoxItemStyle}" BorderThickness="0">
+                <ListBox.GroupStyle>
+                    <GroupStyle>
+                        <GroupStyle.HeaderTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding GroupName}" FontWeight="Bold" Margin="10,5,0,5" Foreground="Gray"/>
+                            </DataTemplate>
+                        </GroupStyle.HeaderTemplate>
+                    </GroupStyle>
+                </ListBox.GroupStyle>
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal" Margin="10,5,10,5">
+                            <Image Source="{Binding IconPath}" Width="20" Height="20" Margin="0,0,10,0"/>
+                            <TextBlock Text="{Binding Title}" VerticalAlignment="Center" FontSize="14" Foreground="Black"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </DockPanel>
+
+        <!-- 主内容区 -->
+        <ContentControl prism:RegionManager.RegionName="MainContentRegion"/>
+
+       
+    </DockPanel>
 </Window>

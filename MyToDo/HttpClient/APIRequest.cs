@@ -12,7 +12,7 @@ namespace MyToDo.WPF.HttpClient
     internal class APIRequest
     {
         public string Route { get; set; }
-        public string Method { get; set; }
+        public RestSharp.Method Method { get; set; }
         public object Parameters { get; set; }
 
         public string ContentType { get; set; }= "application/json";

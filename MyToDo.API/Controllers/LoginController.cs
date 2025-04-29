@@ -24,7 +24,7 @@ namespace MyToDo.API.Controllers
                 return Ok(new APIResponse
                 {
                     StatusCode = 200,
-                    Message = "Login successful",
+                    Message = "登录成功",
                     Result = user
                 });
             }

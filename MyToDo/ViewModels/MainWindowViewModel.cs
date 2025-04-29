@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Controls;
-using MyToDo.Views;
+﻿using MyToDo.WPF.Models;
 using Prism.Commands;
 using Prism.Mvvm;
-using Prism.Regions;
 using Prism.Services.Dialogs;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Windows.Data;
 
 namespace MyToDo.ViewModels
 {
@@ -16,12 +12,20 @@ namespace MyToDo.ViewModels
     {
         private readonly IDialogService _dialogService;
         public DelegateCommand ShowLoginCommand { get; }
+        public ICollectionView GroupedItems { get; }
 
         public MainWindowViewModel(IDialogService dialogService)
         {
             _dialogService = dialogService;
-            ShowLogin();
+            // ShowLogin();
 
+        }
+        // 添加任务命令
+        public DelegateCommand AddTaskCommand { get; }
+
+        private void AddTask()
+        {
+            // NavItems.Add(new NavItem { Title = "新任务", IconPathPath = "/Resources/Images/close.png" });
         }
 
         private void ShowLogin()
@@ -33,7 +37,7 @@ namespace MyToDo.ViewModels
                 {
                     if (result.Result == ButtonResult.OK)
                     {
-                       
+
                         // 处理登录成功逻辑
                     }
                     else
@@ -42,5 +46,6 @@ namespace MyToDo.ViewModels
                     }
                 });
         }
+
     }
 }

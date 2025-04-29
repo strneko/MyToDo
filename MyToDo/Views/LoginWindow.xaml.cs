@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MyToDo.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -59,18 +60,14 @@ namespace MyToDo.Views
             {
                 textPassword.Visibility = Visibility.Visible;
             }
-        
+
+            if (DataContext is LoginWindowViewModel vm)
+            {
+                vm.AccountInfoDTO.AccountPassword = ((PasswordBox)sender).Password;
+            }
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            if(string.IsNullOrEmpty(txtEmail.Text) || string.IsNullOrEmpty(txtPassword.Password))
-            {
-                MessageBox.Show("请输入用户名和密码");
-                return;
-            }
-            MessageBox.Show("登录成功");
-        }
+
 
         private void Border_MouseDown(object sender, MouseButtonEventArgs e)
         {

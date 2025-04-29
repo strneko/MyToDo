@@ -24,7 +24,10 @@ namespace MyToDo
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
             containerRegistry.RegisterDialog<LoginWindow, LoginWindowViewModel>("Login");
+            containerRegistry.GetContainer().RegisterInstance("http://localhost:5074/api/", serviceKey: "webUrl");
+
             containerRegistry.GetContainer().Register<HttpRestClient>(made:Parameters.Of.Type<string>(serviceKey:"webUrl"));
+        
         }
 
         

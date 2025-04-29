@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:local="clr-namespace:MyToDo.Views"
+             xmlns:local="clr-namespace:MyToDo.Views" xmlns:viewmodels="clr-namespace:MyToDo.ViewModels" d:DataContext="{d:DesignInstance Type=viewmodels:LoginWindowViewModel}"
              mc:Ignorable="d"
              MinHeight="500" MinWidth="800"
              
@@ -76,7 +76,7 @@
 
                         <Image Source="/Resources/Images/email.png" Height="20"/>
                         <TextBlock x:Name="textEmail"  Text="邮箱" Style="{StaticResource textHint}"/>
-                        <TextBox x:Name="txtEmail" TextChanged="txtEmail_TextChanged" Background="Transparent" Style="{StaticResource textBox}"/>
+                        <TextBox x:Name="txtEmail" Text="{Binding AccountInfoDTO.AccountEmail}" TextChanged="txtEmail_TextChanged" Background="Transparent" Style="{StaticResource textBox}"/>
                     </Grid>
                 </Border>
 
@@ -92,7 +92,7 @@
                         <PasswordBox x:Name="txtPassword" PasswordChanged="txtPassword_PasswordChanged" Background="Transparent" Style="{StaticResource textBox}"/>
                     </Grid>
                 </Border>
-                <Button Content="登录" Click="Button_Click" Style="{StaticResource mainbutton}"/>
+                <Button Content="登录" Command="{Binding LoginCommand}" Style="{StaticResource mainbutton}"/>
             </StackPanel>
         </Border>
     </Grid>
