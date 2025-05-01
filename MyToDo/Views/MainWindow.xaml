@@ -5,7 +5,7 @@
    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
    xmlns:local="clr-namespace:MyToDo"
    mc:Ignorable="d"
-   xmlns:prism="http://prismlibrary.com/" xmlns:viewmodels="clr-namespace:MyToDo.ViewModels" d:DataContext="{d:DesignInstance Type=viewmodels:MainWindowViewModel}"
+   xmlns:prism="http://prismlibrary.com/" xmlns:viewmodels="clr-namespace:MyToDo.ViewModels" xmlns:models="clr-namespace:MyToDo.WPF.Models" d:DataContext="{d:DesignInstance Type=viewmodels:MainWindowViewModel}"
         prism:ViewModelLocator.AutoWireViewModel="True"
    Title="ToDo" Height="700" Width="1100">
     <Window.Resources>
@@ -21,6 +21,19 @@
         <DockPanel  Width="250" DockPanel.Dock="Left">
             
             <Grid Height="80" DockPanel.Dock="Top">
+                <Image Source="/Resources/Images/daily.png" Width="80" Height="80" >
+                    <Image.Clip>
+                        <EllipseGeometry Center="40,40" RadiusX="40" RadiusY="40" />
+                    </Image.Clip>
+                </Image>
+                <Grid Grid.Column="1">
+                    <TextBlock Text="test@test.com" FontSize="20" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0,0,0"/>
+                    <TextBlock Grid.Row="1" Text="test@test.com" FontSize="16" Opacity="0.6" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0,0,0"/>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                </Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="80"/>
                     <ColumnDefinition Width="auto"/>
@@ -31,39 +44,86 @@
                     <KeyBinding Key="Enter"/>
                 </TextBox.InputBindings>
             </TextBox>
-            <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom" >
-                <Button Background="Transparent" BorderThickness="0" Command="{Binding AddTaskCommand}">
+            <Grid DockPanel.Dock="Bottom">
+                <Button Background="Transparent" BorderThickness="0" Command="{Binding AddTaskCommand}" HorizontalAlignment="Left">
                     <StackPanel Orientation="Horizontal" Margin="5">
                         <Image Source="/Resources/Images/add.png" Width="20" Height="20" Margin="0,0,10,0" VerticalAlignment="Center"/>
-                        <TextBlock Text="添加任务" Width="160" VerticalAlignment="Center" />
+                        <TextBlock Text="新建列表" Width="170" VerticalAlignment="Center" />
                     </StackPanel>
                 </Button>
-            </StackPanel>
+
+                <Button Background="Transparent" BorderThickness="0" Command="{Binding AddGroupCommand}" HorizontalAlignment="Stretch" Grid.Column="1">
+                    <Image Source="/Resources/Images/AddGroup.png" Width="20" Height="20" HorizontalAlignment="Center"/>
+                </Button>
 
 
-            <ListBox ItemsSource="{Binding GroupedItems}" ItemContainerStyle="{StaticResource NavListBoxItemStyle}" BorderThickness="0">
-                <ListBox.GroupStyle>
-                    <GroupStyle>
-                        <GroupStyle.HeaderTemplate>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+            </Grid>
+            <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                <StackPanel>
+                    <!-- 固定列表 -->
+                    <ItemsControl ItemsSource="{Binding FixedNavItems}">
+                        <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding GroupName}" FontWeight="Bold" Margin="10,5,0,5" Foreground="Gray"/>
+                                <Border Padding="10 5" Background="Transparent">
+                                    <StackPanel Orientation="Horizontal">
+                                        <Image Source="{Binding IconPath}"  Width="20" Height="20" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                        <TextBlock Text="{Binding Title}" VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                </Border>
                             </DataTemplate>
-                        </GroupStyle.HeaderTemplate>
-                    </GroupStyle>
-                </ListBox.GroupStyle>
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel Orientation="Horizontal" Margin="10,5,10,5">
-                            <Image Source="{Binding IconPath}" Width="20" Height="20" Margin="0,0,10,0"/>
-                            <TextBlock Text="{Binding Title}" VerticalAlignment="Center" FontSize="14" Foreground="Black"/>
-                        </StackPanel>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                    <Border Height="1" Background="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}" Margin="10,5"/>
+                    <!--自定义列表 -->
+                    <ItemsControl ItemsSource="{Binding DynamicNavItems}">
+                        <ItemsControl.Resources>
+                            <DataTemplate DataType="{x:Type models:NavigationItem}">
+                                <Border Padding="10 5" Background="Transparent">
+                                    <StackPanel Orientation="Horizontal">
+                                        <Image Source="{Binding IconPath}" Width="20" Height="20" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                        <TextBlock Text="{Binding Title}" VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                </Border>
+                            </DataTemplate>
+
+                            <DataTemplate DataType="{x:Type models:NavigationGroup}">
+                                <Expander>
+                                    <Expander.Header>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Image Source="/Resources/Images/Group.png" Width="20" Height="20" Margin="0,0,8,0"/>
+                                            <TextBlock Text="{Binding GroupName}" VerticalAlignment="Center" FontWeight="SemiBold"/>
+                                        </StackPanel>
+                                    </Expander.Header>
+
+                                    <ItemsControl ItemsSource="{Binding Items}">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate DataType="{x:Type models:NavigationItem}">
+                                                <Border Padding="10 5" Background="Transparent">
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <Image Source="{Binding IconPath}" Width="20" Height="20" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                                        <TextBlock Text="{Binding Title}" VerticalAlignment="Center"/>
+                                                    </StackPanel>
+                                                </Border>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </Expander>
+                            </DataTemplate>
+                        </ItemsControl.Resources>
+                    </ItemsControl>
+                    
+                </StackPanel>
+            </ScrollViewer>
+
+
         </DockPanel>
 
         <!-- 主内容区 -->
-        <ContentControl prism:RegionManager.RegionName="MainContentRegion"/>
+        <ContentControl />
 
        
     </DockPanel>

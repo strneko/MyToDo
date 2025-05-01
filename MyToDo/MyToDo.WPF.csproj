@@ -11,10 +11,12 @@
 
   <ItemGroup>
     <None Remove="Resources\Images\add.png" />
+    <None Remove="Resources\Images\AddGroup.png" />
     <None Remove="Resources\Images\close.png" />
     <None Remove="Resources\Images\daily.png" />
     <None Remove="Resources\Images\email.png" />
-    <None Remove="Resources\Images\improtant.png" />
+    <None Remove="Resources\Images\Group.png" />
+    <None Remove="Resources\Images\list.png" />
     <None Remove="Resources\Images\password.png" />
     <None Remove="Resources\Images\QQ.png" />
     <None Remove="Resources\Images\schedule.png" />
@@ -37,6 +39,9 @@
     <Resource Include="Resources\Images\add.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Resources\Images\AddGroup.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Resources\Images\close.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
@@ -46,7 +51,13 @@
     <Resource Include="Resources\Images\email.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Resources\Images\improtant.png">
+    <Resource Include="Resources\Images\Group.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Images\important.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Images\list.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\Images\password.png">

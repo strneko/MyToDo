@@ -16,6 +16,7 @@ namespace MyToDo.WPF.Models
     public class NavigationGroup
     {
         public string GroupName { get; set; }
-        public ObservableCollection<NavigationItem> Items { get; set; }
+        public ObservableCollection<NavigationItem> Items { get; set; }=new ObservableCollection<NavigationItem>();
+        public bool IsExpanded { get; set; } = true;
     }
 }
