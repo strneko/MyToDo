@@ -5,20 +5,36 @@
    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
    xmlns:local="clr-namespace:MyToDo"
    mc:Ignorable="d"
-   xmlns:prism="http://prismlibrary.com/" xmlns:viewmodels="clr-namespace:MyToDo.ViewModels" xmlns:models="clr-namespace:MyToDo.WPF.Models" d:DataContext="{d:DesignInstance Type=viewmodels:MainWindowViewModel}"
+   xmlns:prism="http://prismlibrary.com/" xmlns:viewmodels="clr-namespace:MyToDo.ViewModels" xmlns:models="clr-namespace:MyToDo.WPF.Models" xmlns:converter="clr-namespace:MyToDo.WPF.Resources.Converters" d:DataContext="{d:DesignInstance Type=viewmodels:MainWindowViewModel}" xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         prism:ViewModelLocator.AutoWireViewModel="True"
-   Title="ToDo" Height="700" Width="1100">
+   Title="ToDo" Height="700" Width="1100"
+         MouseDown="Window_MouseDown"
+        >
     <Window.Resources>
+        
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Resources/MainStyles.xaml"/>
             </ResourceDictionary.MergedDictionaries>
+            <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+            <converter:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter" />
+            <ContextMenu x:Key="ItemContextMenu">
+                <MenuItem Header="重命名" Command="{Binding StartEditingCommand}"/>
+                <MenuItem Header="删除" Command="{Binding DeleteCommand}"/>
+            </ContextMenu>
+
+            <ContextMenu x:Key="GroupContextMenu">
+                <MenuItem Header="重命名" Command="{Binding StartEditingCommand}"/>
+                <MenuItem Header="删除" Command="{Binding DeleteCommand}"/>
+            </ContextMenu>
         </ResourceDictionary>
+        
     </Window.Resources>
+    
     
     <DockPanel>
         <!-- 左侧导航 -->
-        <DockPanel  Width="250" DockPanel.Dock="Left">
+        <DockPanel  Width="250" DockPanel.Dock="Left" >
             
             <Grid Height="80" DockPanel.Dock="Top">
                 <Image Source="/Resources/Images/daily.png" Width="80" Height="80" >
@@ -39,7 +55,7 @@
                     <ColumnDefinition Width="auto"/>
                 </Grid.ColumnDefinitions>
             </Grid>
-            <TextBox x:Name="SearchBox" Height="40" Text="搜索" DockPanel.Dock="Top">
+            <TextBox x:Name="SearchBox" Height="40" Text="搜索" DockPanel.Dock="Top" >
                 <TextBox.InputBindings>
                     <KeyBinding Key="Enter"/>
                 </TextBox.InputBindings>
@@ -79,33 +95,65 @@
                     </ItemsControl>
                     <Border Height="1" Background="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}" Margin="10,5"/>
                     <!--自定义列表 -->
-                    <ItemsControl ItemsSource="{Binding DynamicNavItems}">
+                    <ItemsControl ItemsSource="{Binding DynamicNavItems}" IsKeyboardFocusWithinChanged="ItemsControl_IsKeyboardFocusWithinChanged">
+                        <ItemsControl.ItemContainerStyle>
+                            <Style TargetType="ContentPresenter">
+                                <Setter Property="FocusManager.IsFocusScope" Value="True"/>
+                            </Style>
+                        </ItemsControl.ItemContainerStyle>
                         <ItemsControl.Resources>
                             <DataTemplate DataType="{x:Type models:NavigationItem}">
-                                <Border Padding="10 5" Background="Transparent">
+                                <Border Padding="10 5" Background="Transparent" ContextMenu="{StaticResource ItemContextMenu}" >
                                     <StackPanel Orientation="Horizontal">
                                         <Image Source="{Binding IconPath}" Width="20" Height="20" Margin="0,0,8,0" VerticalAlignment="Center"/>
-                                        <TextBlock Text="{Binding Title}" VerticalAlignment="Center"/>
+                                        <TextBox Text="{Binding Title, UpdateSourceTrigger=PropertyChanged}" 
+                                            Visibility="{Binding IsEditing, Converter={StaticResource BooleanToVisibilityConverter}}" 
+                                            VerticalAlignment="Center" Width="150" 
+                                            LostFocus="TextBox_LostFocus" 
+                                            GotFocus="TextBox_GotFocus" 
+                                            KeyDown="TextBox_KeyDown"
+                                            Loaded="TextBox_Loaded"
+                                            FocusManager.FocusedElement="{Binding RelativeSource={RelativeSource Self}}" />
+                                        <TextBlock Text="{Binding Title}" 
+                                            Visibility="{Binding IsEditing, Converter={StaticResource InverseBooleanToVisibilityConverter}}" 
+                                            VerticalAlignment="Center"/>
                                     </StackPanel>
                                 </Border>
                             </DataTemplate>
 
                             <DataTemplate DataType="{x:Type models:NavigationGroup}">
-                                <Expander>
+                                <Expander ContextMenu="{StaticResource ItemContextMenu}" >
                                     <Expander.Header>
                                         <StackPanel Orientation="Horizontal">
                                             <Image Source="/Resources/Images/Group.png" Width="20" Height="20" Margin="0,0,8,0"/>
-                                            <TextBlock Text="{Binding GroupName}" VerticalAlignment="Center" FontWeight="SemiBold"/>
+                                            <TextBox Text="{Binding GroupName, UpdateSourceTrigger=PropertyChanged}" 
+                                                Visibility="{Binding IsEditing, Converter={StaticResource BooleanToVisibilityConverter}}" 
+                                                VerticalAlignment="Center" Width="150" LostFocus="TextBox_LostFocus" Loaded="TextBox_Loaded" GotFocus="TextBox_GotFocus" KeyDown="TextBox_KeyDown" 
+                                                FocusManager.FocusedElement="{Binding RelativeSource={RelativeSource Self}}" />
+                                            <TextBlock Text="{Binding GroupName}" 
+                                                Visibility="{Binding IsEditing, Converter={StaticResource InverseBooleanToVisibilityConverter}}" 
+                                                VerticalAlignment="Center" />
                                         </StackPanel>
                                     </Expander.Header>
 
                                     <ItemsControl ItemsSource="{Binding Items}">
                                         <ItemsControl.ItemTemplate>
                                             <DataTemplate DataType="{x:Type models:NavigationItem}">
-                                                <Border Padding="10 5" Background="Transparent">
+                                                <Border Padding="10 5" Background="Transparent"  ContextMenu="{StaticResource ItemContextMenu}" >
+
                                                     <StackPanel Orientation="Horizontal">
                                                         <Image Source="{Binding IconPath}" Width="20" Height="20" Margin="0,0,8,0" VerticalAlignment="Center"/>
-                                                        <TextBlock Text="{Binding Title}" VerticalAlignment="Center"/>
+                                                        <TextBox Text="{Binding Title, UpdateSourceTrigger=PropertyChanged}" 
+                                                            Visibility="{Binding IsEditing, Converter={StaticResource BooleanToVisibilityConverter}}" 
+                                                            VerticalAlignment="Center" Width="150" 
+                                                            LostFocus="TextBox_LostFocus" 
+                                                            GotFocus="TextBox_GotFocus" 
+                                                            KeyDown="TextBox_KeyDown"
+                                                            Loaded="TextBox_Loaded"
+                                                            FocusManager.FocusedElement="{Binding RelativeSource={RelativeSource Self}}" />
+                                                        <TextBlock Text="{Binding Title}" 
+                                                            Visibility="{Binding IsEditing, Converter={StaticResource InverseBooleanToVisibilityConverter}}" 
+                                                            VerticalAlignment="Center"/>
                                                     </StackPanel>
                                                 </Border>
                                             </DataTemplate>
@@ -113,6 +161,7 @@
                                     </ItemsControl>
                                 </Expander>
                             </DataTemplate>
+                            
                         </ItemsControl.Resources>
                     </ItemsControl>
                     
