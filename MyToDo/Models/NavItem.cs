@@ -26,6 +26,7 @@ namespace MyToDo.WPF.Models
 
         private bool _isEditing;
         public string IconPath { get; set; }
+        public TodoList TodoList { get; set; }
 
         public string Title
         {

@@ -2,6 +2,7 @@
 using MyToDo.ViewModels;
 using MyToDo.Views;
 using MyToDo.WPF.HttpClient;
+using MyToDo.WPF.Views;
 using Prism.DryIoc;
 using Prism.Ioc;
 using Prism.Services.Dialogs;
@@ -27,7 +28,7 @@ namespace MyToDo
             containerRegistry.GetContainer().RegisterInstance("http://localhost:5074/api/", serviceKey: "webUrl");
 
             containerRegistry.GetContainer().Register<HttpRestClient>(made:Parameters.Of.Type<string>(serviceKey:"webUrl"));
-        
+            containerRegistry.RegisterForNavigation<TodoListView>("TodoListView");
         }
 
         

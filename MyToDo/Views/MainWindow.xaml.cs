@@ -69,7 +69,7 @@ namespace MyToDo.Views
         private void TextBox_Loaded(object sender, RoutedEventArgs e)
         {
             if (sender is TextBox textBox &&
-                textBox.DataContext is NavigationItem item &&
+                textBox.DataContext is IEditable item &&
                 DataContext is MainWindowViewModel vm &&
                 item == vm.NewlyCreatedItem)
             {
